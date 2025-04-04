@@ -24,8 +24,8 @@ int main(void)
 	/* ---------------- ARCHIVOS DE CONFIGURACION ---------------- */
 
 	config = config_create ("cliente.config");
-	if (config == NULL)
-	abort();
+	//if (config == NULL)
+	//abort();
 	// Usando el config creado previamente, leemos los valores del config y los 
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
 	char* clave = config_get_string_value (config, "CLAVE");
