@@ -14,21 +14,24 @@ int main(void)
 
 	/* ---------------- LOGGING ---------------- */
 
-	logger = iniciar_logger();
-
+	logger = log_create ("tp0.log", "CLIENT_H_", true, LOG_LEVEL_INFO);
+	log_info (logger, "Hola! Soy un log");
+	log_destroy(logger);
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
 
 
 	/* ---------------- ARCHIVOS DE CONFIGURACION ---------------- */
 
-	config = iniciar_config();
-
+	config = config_create ("cliente.config");
+	if (config == NULL)
+	abort();
 	// Usando el config creado previamente, leemos los valores del config y los 
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
-
+	char* clave = config_get_string_value (config, "CLAVE");
+	printf("Clave: %s\n", clave);
 	// Loggeamos el valor de config
-
+	config_destroy (config);
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
 
