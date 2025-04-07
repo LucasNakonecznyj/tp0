@@ -14,23 +14,37 @@ int main(void)
 
 	/* ---------------- LOGGING ---------------- */
 
-	logger = log_create ("tp0.log", "CLIENT_H_", true, LOG_LEVEL_INFO);
-	log_info (logger, "Hola! Soy un log");
-	log_destroy(logger);
+	logger = iniciar_logger ("tp0.log", "CLIENT_H_", true, LOG_LEVEL_INFO);
+	
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
+
+	log_info (logger, "Hola! Soy un log");
+	log_destroy(logger);
 
 
 	/* ---------------- ARCHIVOS DE CONFIGURACION ---------------- */
 
-	config = config_create ("cliente.config");
-	//if (config == NULL)
-	//abort();
+	config = iniciar_config ("cliente.config");
+
+	if (config == NULL){
+	abort();}
+
 	// Usando el config creado previamente, leemos los valores del config y los 
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
-	char* clave = config_get_string_value (config, "CLAVE");
-	printf("Clave: %s\n", clave);
+
+	ip = config_get_string_value(config, "IP");
+	puerto = config_get_string_value(config, "PUERTO");
+	valor = config_get_string_value(config, "VALOR");
+
 	// Loggeamos el valor de config
+
+	log_info(logger, "IP: %s", ip);
+	log_info(logger, "PUERTO: %s", puerto);
+	log_info(logger, "CLAVE: %s", valor);
+
+	printf("IP: %s\nPUERTO: %s\nCLAVE: %s\n", ip, puerto, valor);
+
 	config_destroy (config);
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
@@ -45,7 +59,7 @@ int main(void)
 	conexion = crear_conexion(ip, puerto);
 
 	// Enviamos al servidor el valor de CLAVE como mensaje
-
+	enviar_mensaje(valor, conexion);
 	// Armamos y enviamos el paquete
 	paquete(conexion);
 
@@ -78,6 +92,13 @@ void leer_consola(t_log* logger)
 
 	// El resto, las vamos leyendo y logueando hasta recibir un string vacío
 
+    while (leido != NULL && strlen(leido) > 0) {
+        log_info(logger, "%s", leido);
+        free(leido);
+        leido = readline("> ");
+    }
+
+    free(leido);
 
 	// ¡No te olvides de liberar las lineas antes de regresar!
 
@@ -87,12 +108,23 @@ void paquete(int conexion)
 {
 	// Ahora toca lo divertido!
 	char* leido;
-	t_paquete* paquete;
+	t_paquete* paquete = crear_paquete();
 
 	// Leemos y esta vez agregamos las lineas al paquete
 
+	leido = readline("> ");
+    while (leido != NULL && strlen(leido) > 0) {
+        agregar_a_paquete(paquete, leido, strlen(leido) + 1);
+        free(leido);
+        leido = readline("> ");
+    }
 
 	// ¡No te olvides de liberar las líneas y el paquete antes de regresar!
+
+	free(leido);
+
+    enviar_paquete(paquete, conexion);
+    eliminar_paquete(paquete);
 	
 }
 
@@ -100,4 +132,17 @@ void terminar_programa(int conexion, t_log* logger, t_config* config)
 {
 	/* Y por ultimo, hay que liberar lo que utilizamos (conexion, log y config) 
 	  con las funciones de las commons y del TP mencionadas en el enunciado */
+
+	if (conexion >= 0) {
+        close(conexion);
+    }
+
+    if (logger != NULL) {
+        log_info(logger, "Finalizando programa...");
+        log_destroy(logger);
+    }
+
+    if (config != NULL) {
+        config_destroy(config);
+    }
 }
