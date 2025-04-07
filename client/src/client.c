@@ -20,7 +20,6 @@ int main(void)
 	// Escribi: "Hola! Soy un log"
 
 	log_info (logger, "Hola! Soy un log");
-	log_destroy(logger);
 
 
 	/* ---------------- ARCHIVOS DE CONFIGURACION ---------------- */
