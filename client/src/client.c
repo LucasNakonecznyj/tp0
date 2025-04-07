@@ -44,7 +44,6 @@ int main(void)
 
 	printf("IP: %s\nPUERTO: %s\nCLAVE: %s\n", ip, puerto, valor);
 
-	config_destroy (config);
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
 
