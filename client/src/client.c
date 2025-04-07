@@ -68,18 +68,14 @@ int main(void)
 	// Proximamente
 }
 
-t_log* iniciar_logger(void)
+t_log* iniciar_logger(char* archivo, char* nombre, bool mostrar_consola, t_log_level nivel)
 {
-	t_log* nuevo_logger;
-
-	return nuevo_logger;
+    return log_create(archivo, nombre, mostrar_consola, nivel);
 }
 
-t_config* iniciar_config(void)
+t_config* iniciar_config(char* path)
 {
-	t_config* nuevo_config;
-
-	return nuevo_config;
+    return config_create(path);
 }
 
 void leer_consola(t_log* logger)
