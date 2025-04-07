@@ -42,7 +42,16 @@ int main(void)
 	log_info(logger, "PUERTO: %s", puerto);
 	log_info(logger, "CLAVE: %s", valor);
 
+	if (!ip) puts("ip es NULL");
+	if (!puerto) puts("puerto es NULL");
+	if (!valor) puts("valor es NULL");
+
 	printf("IP: %s\nPUERTO: %s\nCLAVE: %s\n", ip, puerto, valor);
+
+	if (ip == NULL || puerto == NULL || valor == NULL) {
+		log_error(logger, "Algún valor del config es NULL");
+		abort();
+	}
 
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
@@ -138,5 +147,6 @@ void terminar_programa(int conexion, t_log* logger, t_config* config)
 
     if (config != NULL) {
         config_destroy(config);
+		config = NULL;
     }
 }
