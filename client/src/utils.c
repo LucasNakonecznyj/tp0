@@ -25,7 +25,7 @@ int crear_conexion(char *ip, char* puerto)
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 
-	getaddrinfo("192.168.0.109", "4444", &hints, &server_info);
+	getaddrinfo("192.168.64.2", "4444", &hints, &server_info);
 
 	// Ahora vamos a crear el socket.
 	int socket_cliente = socket(server_info->ai_family,
